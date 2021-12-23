@@ -1,11 +1,11 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
-const OrderStatusScreen = (props) => {
+const DashBoardScreen = (props) => {
   return <View style={styles.root}></View>;
 };
 
-export default OrderStatusScreen;
+export default DashBoardScreen;
 
 export const screenOptions = (navData) => {
   return {};

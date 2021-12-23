@@ -1,20 +1,60 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import axios from "axios";
+import React from "react";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import { useState } from "react";
+import { StyleSheet, Text, View, Button } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import UserTabNavigation from "./navigation/Navigator";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  return <UserTabNavigation />;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+// const API_ENDPOINT = "https://clicktoeat-b46f5-default-rtdb.firebaseio.com/";
+// const [data, setData] = useState([]);
+// // useEffect(async () => {
+// //   var data = await axios.get(`${API_ENDPOINT}users.json`);
+// //   setData(data);
+// // }, []);
+// const getData = async () => {
+//   var response = await axios.get(`${API_ENDPOINT}cafe/rating.json`);
+//   var resData = response.data;
+//   const arr = [];
+//   console.log(resData);
+//   for (var key in resData) {
+//     arr.push(resData[key]);
+//   }
+//   setData(arr);
+// };
+// const addData = async () => {
+//   await axios.post(`${API_ENDPOINT}cafe/rating.json`, {
+//     FirstName: "Abdul",
+//     LastName: "Munim",
+//     rating: "3",
+//   });
+//   console.log("Done");
+// };
+// return (
+//   <View style={{ flex: 1, justifyContent: "center" }}>
+//     <Button title="Add Data" onPress={addData} />
+//     <Button title="Show Data" onPress={getData} />
+//     <View style={{ width: "100%", height: "50%" }}>
+//       <FlatList
+//         data={data}
+//         keyExtractor={(item, index) => {
+//           return index;
+//         }}
+//         renderItem={(itemData) => {
+//           return (
+//             <View>
+//               <Text>{itemData.item.FirstName}</Text>
+//               <Text>{itemData.item.LastName}</Text>
+//               <Text>Rating {itemData.item.rating}</Text>
+//             </View>
+//           );
+//         }}
+//       />
+//     </View>
+//   </View>
+// );
