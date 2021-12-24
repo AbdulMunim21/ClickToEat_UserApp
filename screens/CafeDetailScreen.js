@@ -2,7 +2,11 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 const CafeDetailScreen = (props) => {
-  return <View style={styles.root}></View>;
+  return (
+    <View style={styles.root}>
+      <Text>{props.route.params.title}</Text>
+    </View>
+  );
 };
 
 export default CafeDetailScreen;
