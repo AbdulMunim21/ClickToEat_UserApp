@@ -77,6 +77,8 @@ const SignUpScreen = (props) => {
 
   return (
     <View style={styles.root}>
+      <Text style={{ ...styles.headerText, fontSize: 50 }}>Click To Eat</Text>
+      <Text style={styles.headerText}>Signup Screen</Text>
       <View style={styles.cardStyle}>
         <CustomTextInput
           styles={styles}
@@ -128,7 +130,7 @@ const SignUpScreen = (props) => {
           <Pressable
             style={styles.LoginButton}
             onPress={() => {
-              props.navigation.replace("SignUpScreen");
+              props.navigation.replace("LoginScreen");
             }}
           >
             <Text
@@ -199,5 +201,9 @@ const styles = StyleSheet.create({
     color: "blue",
 
     fontSize: 15,
+  },
+  headerText: {
+    fontSize: 30,
+    fontWeight: "bold",
   },
 });

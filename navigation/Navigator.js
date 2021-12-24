@@ -1,4 +1,6 @@
 import React from "react";
+import { View } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -27,6 +29,7 @@ import FeedbackScreen, {
 import FavoriteCafeScreen, {
   screenOptions as FavoriteScreenOptions,
 } from "../screens/FavoriteCafeScreen";
+import SplashScreen from "../screens/SplashScreen";
 
 const UserStack = createNativeStackNavigator();
 const UserFavStack = createNativeStackNavigator();
@@ -80,8 +83,42 @@ const UserFavNavigation = () => {
 const UserTabNavigation = () => {
   return (
     <UserTab.Navigator screenOptions={{ headerShown: false }}>
-      <UserTab.Screen name="UserStackNavigator" component={UserNavigation} />
-      <UserTab.Screen name="UserFavNavigator" component={UserFavNavigation} />
+      <UserTab.Screen
+        name="UserStackNavigator"
+        component={UserNavigation}
+        options={{
+          tabBarLabel: "Home",
+          tabBarIcon: ({ tintColor }) => (
+            <View>
+              <Icon
+                style={[{ color: tintColor }]}
+                size={25}
+                name={"ios-home"}
+              />
+            </View>
+          ),
+          activeColor: "#615af6",
+          inactiveColor: "#46f6d7",
+        }}
+      />
+      <UserTab.Screen
+        name="UserFavNavigator"
+        component={UserFavNavigation}
+        options={{
+          tabBarLabel: "Favorite Cafe",
+          tabBarIcon: ({ tintColor }) => (
+            <View>
+              <Icon
+                style={[{ color: tintColor }]}
+                size={25}
+                name={"star"}
+              />
+            </View>
+          ),
+          activeColor: "#615af6",
+          inactiveColor: "#46f6d7",
+        }}
+      />
     </UserTab.Navigator>
   );
 };
@@ -90,6 +127,7 @@ export default RootNavigation = () => {
   return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        <RootStack.Screen name="SplashScreen" component={SplashScreen} />
         <RootStack.Screen
           name="LoginScreen"
           component={LoginScreen}

@@ -5,32 +5,8 @@ import SplashScreen from "./SplashScreen";
 import axios from "axios";
 
 const LoginScreen = (props) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState();
-
-  useEffect(async () => {
-    var userData = await AsyncStorage.getItem("userData");
-    console.log(userData);
-    const transformedData = JSON.parse(userData);
-    console.log(transformedData);
-
-    if (!transformedData) {
-      setIsLoading(false);
-      return;
-    }
-
-    const { idToken, localId, expiresIn } = transformedData;
-
-    const expirationDate = new Date(expiresIn);
-    if (expirationDate <= new Date() || !idToken || !localId) {
-      setIsLoading(false);
-
-      return;
-    }
-
-    props.navigation.navigate("DashBoard");
-  }, []);
 
   const loginHandler = async (email, pass) => {
     var response = await axios.post(
@@ -54,12 +30,10 @@ const LoginScreen = (props) => {
     props.navigation.navigate("DashBoard");
     console.log("Hello");
   };
-
-  if (isLoading) {
-    return <SplashScreen />;
-  }
   return (
     <View style={styles.root}>
+      <Text style={{ ...styles.headerText, fontSize: 50 }}>Click To Eat</Text>
+      <Text style={styles.headerText}>Login Screen</Text>
       <View style={styles.cardStyle}>
         <TextInput
           style={styles.textInputStyle}
@@ -168,5 +142,9 @@ const styles = StyleSheet.create({
     color: "blue",
 
     fontSize: 15,
+  },
+  headerText: {
+    fontSize: 30,
+    fontWeight: "bold",
   },
 });

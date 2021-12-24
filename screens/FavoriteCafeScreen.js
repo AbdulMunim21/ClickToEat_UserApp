@@ -2,7 +2,11 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 const FavoriteCafeScreen = (props) => {
-  return <View style={styles.root}></View>;
+  return (
+    <View style={styles.root}>
+      <Text>Favorite Screen</Text>
+    </View>
+  );
 };
 
 export default FavoriteCafeScreen;
