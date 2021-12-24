@@ -1,10 +1,11 @@
 class CafeModel {
-  constructor(title, description, imageUrl, rating, itemsList) {
+  constructor(id, title, description, imageUrl, rating) {
+    this.id = id;
     this.title = title;
     this.description = description;
     this.imageUrl = imageUrl;
     this.rating = rating;
-    this.itemsList = itemsList;
+    // this.itemsList = itemsList;
   }
 }
 

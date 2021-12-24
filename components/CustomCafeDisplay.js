@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 
 const CustomCafeDisplay = (props) => {
+  const id = props.id;
   const imageUrl = props.imageUrl;
   const title = props.title;
   const description = props.description;
@@ -11,6 +12,7 @@ const CustomCafeDisplay = (props) => {
       style={{ width: "100%", height: 400 }}
       onPress={props.showDetails.bind(
         this,
+        id,
         title,
         description,
         imageUrl,
