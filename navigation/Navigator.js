@@ -28,29 +28,10 @@ import FavoriteCafeScreen, {
   screenOptions as FavoriteScreenOptions,
 } from "../screens/FavoriteCafeScreen";
 
-const RootStack = createNativeStackNavigator();
 const UserStack = createNativeStackNavigator();
 const UserFavStack = createNativeStackNavigator();
 const UserTab = createBottomTabNavigator();
-const AuthStack = createNativeStackNavigator();
-
-var isSignedIn = true;
-const AuthNavigation = () => {
-  return (
-    <AuthStack.Navigator>
-      <UserStack.Screen
-        name="LoginScreen"
-        component={LoginScreen}
-        options={LoginScreenOptions}
-      />
-      <UserStack.Screen
-        name="SignUpScreen"
-        component={SignUpScreen}
-        options={SignUpScreenOptions}
-      />
-    </AuthStack.Navigator>
-  );
-};
+const RootStack = createNativeStackNavigator();
 
 const UserNavigation = () => {
   return (
@@ -105,20 +86,22 @@ const UserTabNavigation = () => {
   );
 };
 
-const RootStackNavigation = () => {
-  return isSignedIn ? (
+export default RootNavigation = () => {
+  return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name="TabNavigation" component={UserTabNavigation} />
-      </RootStack.Navigator>
-    </NavigationContainer>
-  ) : (
-    <NavigationContainer>
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name="AuthScreens" component={AuthNavigation} />
+        <RootStack.Screen
+          name="LoginScreen"
+          component={LoginScreen}
+          options={LoginScreenOptions}
+        />
+        <RootStack.Screen
+          name="SignUpScreen"
+          component={SignUpScreen}
+          options={SignUpScreenOptions}
+        />
+        <RootStack.Screen name="DashBoard" component={UserTabNavigation} />
       </RootStack.Navigator>
     </NavigationContainer>
   );
 };
-
-export default RootStackNavigation;

@@ -1,14 +1,9 @@
 import axios from "axios";
 import React from "react";
-import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import { useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import UserTabNavigation from "./navigation/Navigator";
+import RootNavigation from "./navigation/Navigator";
 
 export default function App() {
-  return <UserTabNavigation />;
+  return <RootNavigation />;
 }
 
 // const API_ENDPOINT = "https://clicktoeat-b46f5-default-rtdb.firebaseio.com/";
@@ -28,7 +23,7 @@ export default function App() {
 //   setData(arr);
 // };
 // const addData = async () => {
-//   await axios.post(`${API_ENDPOINT}cafe/rating.json`, {
+//   await axios.post(`${API_ENDPOINT}cafe/rating.json?auth=AIzaSyBCTbcaYIOInsCTmHJhEjiR7MbAmSsNHj8`, {
 //     FirstName: "Abdul",
 //     LastName: "Munim",
 //     rating: "3",

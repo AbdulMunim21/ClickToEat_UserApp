@@ -1,8 +1,25 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, StyleSheet, Text, Button } from "react-native";
 
 const DashBoardScreen = (props) => {
-  return <View style={styles.root}></View>;
+  return (
+    <View style={styles.root}>
+      <Button
+        title="LogOut"
+        onPress={async () => {
+          await AsyncStorage.removeItem("userData");
+          props.navigation.replace("LoginScreen");
+        }}
+      />
+      <Button
+        title="GoCafe"
+        onPress={async () => {
+         props.navigation.navigate("CafeDetailScreen")
+        }}
+      />
+    </View>
+  );
 };
 
 export default DashBoardScreen;
