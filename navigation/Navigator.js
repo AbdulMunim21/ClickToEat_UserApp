@@ -17,6 +17,9 @@ import DashBoardScreen, {
 import CafeDetailScreen, {
   screenOptions as CafeDetailScreenOptions,
 } from "../screens/CafeDetailScreen";
+import OrderNowScreen, {
+  screenOptions as OrderNowScreenOptions,
+} from "../screens/OrderNowScreen";
 import OrderStatusScreen, {
   screenOptions as OrderStatusScreenOptions,
 } from "../screens/OrderStatusScreen";
@@ -48,6 +51,11 @@ const UserNavigation = () => {
         name="CafeDetailScreen"
         component={CafeDetailScreen}
         options={CafeDetailScreenOptions}
+      />
+      <UserStack.Screen
+        name="OrderNowScreen"
+        component={OrderNowScreen}
+        options={OrderNowScreenOptions}
       />
       <UserStack.Screen
         name="OrderStatusScreen"
@@ -108,11 +116,7 @@ const UserTabNavigation = () => {
           tabBarLabel: "Favorite Cafe",
           tabBarIcon: ({ tintColor }) => (
             <View>
-              <Icon
-                style={[{ color: tintColor }]}
-                size={25}
-                name={"star"}
-              />
+              <Icon style={[{ color: tintColor }]} size={25} name={"star"} />
             </View>
           ),
           activeColor: "#615af6",

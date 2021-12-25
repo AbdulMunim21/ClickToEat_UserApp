@@ -21,7 +21,7 @@ const DashBoardScreen = (props) => {
   useEffect(async () => {
     var response = await axios.get(`${API_ENDPOINT}cafe.json`);
     const resData = response.data;
-    console.log(resData);
+
     const ListOfCafe = [];
     for (var key in resData) {
       const id = key;
@@ -40,7 +40,7 @@ const DashBoardScreen = (props) => {
 
       ListOfCafe.push(cafe);
     }
-    console.log("HEEHEE" + ListOfCafe);
+    console.log("Cafe List:" + ListOfCafe);
     setCafeList(ListOfCafe);
     setIsLoading(false);
   }, []);
