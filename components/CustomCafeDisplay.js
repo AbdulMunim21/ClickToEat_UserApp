@@ -7,6 +7,7 @@ const CustomCafeDisplay = (props) => {
   const title = props.title;
   const description = props.description;
   const rating = props.rating;
+  // console.log(imageUrl);
   return (
     <Pressable
       style={{ width: "100%", height: 400 }}

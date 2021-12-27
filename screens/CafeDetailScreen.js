@@ -186,7 +186,9 @@ const CafeDetailScreen = (props) => {
           }}
         />
       ) : (
-        <Text>Nothing Exist</Text>
+        <Text style={{ fontSize: 40, marginTop: 100 }}>
+          No Item Added by Cafe Owner{" "}
+        </Text>
       )}
     </View>
   );
@@ -202,6 +204,9 @@ export const screenOptions = (navData) => {
 
   return {
     title: title,
+    // headerLeft: () => {
+    //   return <Button title="Go Back" />;
+    // },
     headerRight: () => {
       return (
         <View style={{ flexDirection: "row" }}>

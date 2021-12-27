@@ -61,7 +61,7 @@ const DashBoardScreen = (props) => {
       ) : (
         <FlatList
           data={cafeList}
-          style={{ width: "96%" }}
+          style={{ width: "80%" }}
           keyExtractor={(item, index) => {
             return index;
           }}
