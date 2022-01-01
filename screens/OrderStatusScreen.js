@@ -10,15 +10,19 @@ import {
 import axios from "axios";
 import LottieView from "lottie-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import MapPreview from "../components/MapPreview";
+import { ScrollView } from "react-native-gesture-handler";
 
 const API_ENDPOINT = "https://clicktoeat-b46f5-default-rtdb.firebaseio.com/";
 const OrderStatusScreen = (props) => {
   const cafeId = props.route.params.cafeId;
+  const location = props.route.params.location;
   const [isLoading, setIsLoading] = useState(true);
   const [orderBy, setOrderBy] = useState();
   const [cafeName, setCafeName] = useState();
   const [imageUrl, setImageUrl] = useState();
   const [orderStatus, setOrderStatus] = useState("preparing");
+  console.log(location);
 
   useEffect(async () => {
     const userData = await AsyncStorage.getItem("userData");
@@ -51,44 +55,56 @@ const OrderStatusScreen = (props) => {
     setIsLoading(false);
   }, []);
 
+  const googleMaps = () => {};
   return isLoading ? (
     <ActivityIndicator size={20} color={"blue"} />
   ) : (
     <View style={styles.root}>
-      <Image
-        source={{ uri: imageUrl }}
-        style={{ width: "100%", height: 250 }}
-      />
-      <Text style={{ textAlign: "center" }}>{cafeName}</Text>
-      <Text>Order By: {orderBy} </Text>
-      {orderStatus == "preparing" ? (
-        <LottieView
+      <ScrollView
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Image
+          source={{ uri: imageUrl }}
           style={{ width: "100%", height: 250 }}
-          source={require("../assets/lottie/preparing.json")}
-          autoPlay
         />
-      ) : (
-        <LottieView
-          style={{ width: 200, height: 200 }}
-          source={require("../assets/lottie/delivering.json")}
-          autoPlay
-        />
-      )}
-      <Text style={{ textAlign: "center", fontSize: 40 }}>{orderStatus}</Text>
-      {orderStatus == "preparing" ? null : (
-        <Pressable
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: 50,
-            backgroundColor: "blue",
-          }}
-          onPress={() => {}}
-        >
-          <Text style={{ color: "white", fontSize: 30 }}>View on Maps</Text>
-        </Pressable>
-      )}
+        <Text style={{ textAlign: "center" }}>{cafeName}</Text>
+        <Text>Order By: {orderBy} </Text>
+        <Text>{orderBy}'s Location</Text>
+        <View style={{ width: "100%", height: 200 }}>
+          <MapPreview location={location} googleMaps={googleMaps} />
+        </View>
+        {orderStatus == "preparing" ? (
+          <LottieView
+            style={{ width: "100%", height: 150 }}
+            source={require("../assets/lottie/preparing.json")}
+            autoPlay
+          />
+        ) : (
+          <LottieView
+            style={{ width: "100%", height: 150 }}
+            source={require("../assets/lottie/delivering.json")}
+            autoPlay
+          />
+        )}
+        <Text style={{ textAlign: "center", fontSize: 40 }}>{orderStatus}</Text>
+        {orderStatus == "preparing" ? null : (
+          <Pressable
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: 50,
+              backgroundColor: "blue",
+            }}
+            onPress={() => {}}
+          >
+            <Text style={{ color: "white", fontSize: 30 }}>View on Maps</Text>
+          </Pressable>
+        )}
+      </ScrollView>
     </View>
   );
 };
@@ -102,9 +118,5 @@ export const screenOptions = (navData) => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });

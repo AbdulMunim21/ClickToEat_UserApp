@@ -61,7 +61,7 @@ const DashBoardScreen = (props) => {
       ) : (
         <FlatList
           data={cafeList}
-          style={{ width: "80%" }}
+          style={{ width: "100%" }}
           keyExtractor={(item, index) => {
             return index;
           }}
@@ -105,9 +105,5 @@ export const screenOptions = (navData) => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });

@@ -1,16 +1,52 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet, Text, Pressable, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Text, Pressable, Image, Alert } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Icon from "react-native-vector-icons/Ionicons";
+import * as Location from "expo-location";
+import * as Permission from "expo-permissions";
 
 const OrderNowScreen = (props) => {
   const orders = props.route.params.orders;
   const cafeId = props.route.params.cafeId;
   const API_ENDPOINT = "https://clicktoeat-b46f5-default-rtdb.firebaseio.com/";
+  const [pickedLocation, setPickedLocation] = useState();
+
+  const getPermission = async () => {
+    const result = await Permission.askAsync(Permission.LOCATION_FOREGROUND);
+    if (result.status !== "granted") {
+      Alert.alert(
+        "Insufficient Permission",
+        "You need to give your location in order to use this app",
+        [{ text: "ok", style: "destructive" }]
+      );
+      return false;
+    }
+    return true;
+  };
 
   const addOrder = async () => {
+    const hasPermission = await getPermission();
+    var location;
+    if (!hasPermission) {
+      return;
+    }
+    try {
+      location = await Location.getCurrentPositionAsync({});
+      setPickedLocation({
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+      });
+      console.log("add order", {
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+      });
+    } catch (e) {
+      Alert.alert("Alert", "Could not fetch location", [
+        { text: "ok", style: "destructive" },
+      ]);
+    }
     const userData = await AsyncStorage.getItem("userData");
     const jsonData = JSON.parse(userData);
     var totalPrice = 0;
@@ -25,13 +61,26 @@ const OrderNowScreen = (props) => {
       orders: orders,
       totalPrice: totalPrice,
       status: "preparing",
+      userLat: location.coords.latitude,
+      userLng: location.coords.longitude,
     });
 
-    props.navigation.setParams({ cafeId: cafeId, localId: localId });
+    props.navigation.setParams({
+      cafeId: cafeId,
+      localId: localId,
+      location: {
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+      },
+    });
     props.navigation.navigate("OrderStatusScreen", {
       cafeId: cafeId,
-      
+      location: {
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+      },
     });
+    
   };
 
   return orders ? (
@@ -98,7 +147,8 @@ export default OrderNowScreen;
 
 export const screenOptions = (navData) => {
   const cafeId = navData.route.params.cafeId;
-  const localId = navData.route.params.localId;
+  // const localId = navData.route.params.localId;
+  const pickedLocation = navData.route.params.location;
   return {
     headerRight: () => {
       return (
@@ -106,7 +156,7 @@ export const screenOptions = (navData) => {
           onPress={() => {
             navData.navigation.navigate("OrderStatusScreen", {
               cafeId: cafeId,
-              localId: localId,
+              location: pickedLocation,
             });
           }}
         >
