@@ -31,7 +31,7 @@ const CustomItem = (props) => {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={props.userOrder.bind(this, props.price, props.title)}
+          onPress={props.addOrderList.bind(this, props.title, props.price)}
         >
           <Icon size={25} name={"add"} color={"white"} />
         </Pressable>

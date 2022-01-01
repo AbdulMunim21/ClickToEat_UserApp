@@ -15,6 +15,7 @@ const API_ENDPOINT = "https://clicktoeat-b46f5-default-rtdb.firebaseio.com/";
 const FavoriteCafeScreen = (props) => {
   const [favList, setFavList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(async () => {
     const asyncData = await AsyncStorage.getItem("userData");
     const JSON_AsyncData = JSON.parse(asyncData);
@@ -74,6 +75,49 @@ const FavoriteCafeScreen = (props) => {
       ) : (
         <FlatList
           data={favList}
+          refreshing={refreshing}
+          onRefresh={async () => {
+            const asyncData = await AsyncStorage.getItem("userData");
+            const JSON_AsyncData = JSON.parse(asyncData);
+            const localId = JSON_AsyncData.localId;
+
+            const favData = await axios.get(
+              `${API_ENDPOINT}users/${localId}/favorite.json`
+            );
+
+            const parsedData = favData.data;
+            const favCafeList = [];
+            for (const key in parsedData) {
+              favCafeList.push({ id: key, cafe: parsedData[key].favoriteCafe });
+            }
+
+            const originalData = [];
+
+            for (var i = 0; i < favCafeList.length; i++) {
+              const response = await axios.get(
+                `${API_ENDPOINT}cafe/${favCafeList[i].cafe}.json`
+              );
+              const parsedCafeData = response.data;
+
+              const id = favCafeList[i].cafe;
+              const title = parsedCafeData.title;
+              const imageUrl = parsedCafeData.imageUrl;
+              const rating = parsedCafeData.rating;
+              const description = parsedCafeData.description;
+
+              originalData.push({
+                id: id,
+                title: title,
+                imageUrl: imageUrl,
+                rating: rating,
+                description: description,
+              });
+            }
+
+            console.log(originalData);
+            setFavList(originalData);
+            setRefreshing(false);
+          }}
           style={{ width: "80%" }}
           keyExtractor={(item, index) => {
             return index;

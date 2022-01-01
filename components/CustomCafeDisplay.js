@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const CustomCafeDisplay = (props) => {
   const id = props.id;
@@ -7,6 +8,8 @@ const CustomCafeDisplay = (props) => {
   const title = props.title;
   const description = props.description;
   const rating = props.rating;
+  const [stars, setStars] = useState([1, 2, 3, 4, 5]);
+
   // console.log(imageUrl);
   return (
     <Pressable
@@ -31,9 +34,15 @@ const CustomCafeDisplay = (props) => {
           }}
         >
           <Text style={{ fontSize: 20, color: "black" }}>{title}</Text>
-          <Text style={{ fontSize: 20, color: "black" }}>
-            {rating} / 5 Rating
-          </Text>
+          <View style={{ flexDirection: "row" }}>
+            {stars.map((item, index) => {
+              return item <= rating ? (
+                <Icon key={index} name="ios-star"></Icon>
+              ) : (
+                <Icon key={index} name="ios-star-outline"></Icon>
+              );
+            })}
+          </View>
         </View>
       </View>
     </Pressable>

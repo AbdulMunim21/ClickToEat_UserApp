@@ -9,12 +9,12 @@ import {
   ScrollView,
   Pressable,
   Alert,
+  FlatList,
 } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import Icon from "react-native-vector-icons/Ionicons";
 import CustomItem from "../components/CustomItem";
 import ItemModel from "../models/ItemModel";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Icon from "react-native-vector-icons/Ionicons";
 
 const API_ENDPOINT = "https://clicktoeat-b46f5-default-rtdb.firebaseio.com/";
 const CafeDetailScreen = (props) => {
@@ -23,9 +23,11 @@ const CafeDetailScreen = (props) => {
   const description = props.route.params.description;
   const imageUrl = props.route.params.imageUrl;
   const rating = props.route.params.rating;
+  const [stars, setStars] = useState([1, 2, 3, 4, 5]);
   const [listItems, setListItems] = useState([]);
   const [exist, setExist] = useState(true);
   const [isFav, setIsFav] = useState(false);
+  const [orders, setOrders] = useState([]);
 
   useEffect(async () => {
     var data = await AsyncStorage.getItem("userData");
@@ -80,70 +82,25 @@ const CafeDetailScreen = (props) => {
   }, []);
 
   useEffect(() => {
-    props.navigation.setParams({ isFav: isFav, changeFav: changeFav });
+    props.navigation.setParams({
+      isFav: isFav,
+      changeFav: changeFav,
+      cafeId: cafeId,
+    });
   }, [isFav]);
 
   const changeFav = () => {
     setIsFav(!isFav);
   };
 
-  const addOrder = async (price, item) => {
-    const userData = await AsyncStorage.getItem("userData");
-    const jsonData = JSON.parse(userData);
-    // setPrice((oldPrice) => oldPrice + price);
-    const localId = jsonData.localId;
-
-    const orderData = await axios.get(
-      `${API_ENDPOINT}orders/${cafeId}/${localId}.json`
-    );
-
-    if (orderData.data == null) {
-      console.log("Nothing, adding new Order");
-      await axios.post(`${API_ENDPOINT}orders/${cafeId}/${localId}.json`, {
-        userId: localId,
-        cafeId: cafeId,
-        price: price,
-        items: [
-          {
-            itemName: item,
-            price: price,
-          },
-        ],
-      });
-    } else {
-      console.log("Order Existed, Editing Order");
-      const orderData = await axios.get(
-        `${API_ENDPOINT}orders/${cafeId}/${localId}.json`
-      );
-
-      var resData = orderData.data;
-      var data;
-
-      // console.log(JSON.stringify(resData));
-
-      for (const key in resData) {
-        // console.log("Key :" + key);
-        if (key == "cafeId") {
-          data = resData;
-          break;
-        } else {
-          data = resData[key];
-        }
-      }
-
-      const array = data.items;
-      var newPrice = data.price + price;
-
-      var updatedItems = [...array, { itemName: item, price: price }];
-      // console.log(updatedItems);
-      await axios.put(`${API_ENDPOINT}orders/${cafeId}/${localId}.json`, {
-        userId: localId,
-        cafeId: cafeId,
-        price: newPrice,
-        items: updatedItems,
-      });
-      // console.log(localId, cafeId, newPrice, updatedItems);
-    }
+  const addOrderList = (itemName, itemPrice) => {
+    console.log({ itemName: itemName, itemPrice: itemPrice });
+    setOrders([...orders, { itemName: itemName, itemPrice: itemPrice }]);
+    props.navigation.setParams({
+      isFav: isFav,
+      changeFav: changeFav,
+      orders: orders,
+    });
   };
   return (
     <View style={styles.root}>
@@ -163,7 +120,15 @@ const CafeDetailScreen = (props) => {
       </View>
       <Text>{title}</Text>
       <Text>{description}</Text>
-      <Text>{rating}</Text>
+      <View style={{ flexDirection: "row" }}>
+        {stars.map((item) => {
+          return item <= rating ? (
+            <Icon name="ios-star"></Icon>
+          ) : (
+            <Icon name="ios-star-outline"></Icon>
+          );
+        })}
+      </View>
       {exist ? (
         <FlatList
           data={listItems}
@@ -180,7 +145,7 @@ const CafeDetailScreen = (props) => {
                 title={itemData.item.title}
                 imageUrl={itemData.item.imageUrl}
                 price={itemData.item.price}
-                userOrder={addOrder}
+                addOrderList={addOrderList}
               />
             );
           }}
@@ -201,6 +166,8 @@ export const screenOptions = (navData) => {
   const cafeId = navData.route.params.cafeId;
   var isFav = navData.route.params.isFav;
   const changeFav = navData.route.params.changeFav;
+
+  const orders = navData.route.params.orders;
 
   return {
     title: title,
@@ -259,7 +226,10 @@ export const screenOptions = (navData) => {
           </Pressable>
           <Pressable
             onPress={() => {
-              navData.navigation.navigate("OrderNowScreen");
+              navData.navigation.navigate("OrderNowScreen", {
+                orders: orders,
+                cafeId: cafeId,
+              });
             }}
           >
             <Icon name="cart" size={20} />
