@@ -55,7 +55,11 @@ const OrderStatusScreen = (props) => {
     setIsLoading(false);
   }, []);
 
-  const googleMaps = () => {};
+  const googleMaps = () => {
+    props.navigation.navigate("OrderTrackingScreen", {
+      location: location,
+    });
+  };
   return isLoading ? (
     <ActivityIndicator size={20} color={"blue"} />
   ) : (
